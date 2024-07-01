@@ -3,17 +3,20 @@
 #include <map>
 #include <string>
 
-const int screenWidth = 800;
+const int screenWidth = 750;
 const int screenHeight = 450;
 
 const int blockSize = 50;
 
+float timer = 0;
+
 class Snake
 {
 public:
-	Vector2 frontPosition;
+	Vector2 frontPosition = { 0, 0 };
 	std::map<std::string, Vector2> directions;
-	std::string currentDirection;
+	std::string currentDirection = "RIGHT";
+	float delayInSeconds = 0.5;
 };
 
 Snake snake;
@@ -64,15 +67,20 @@ void DrawGame()
 {
 	ClearBackground(RAYWHITE);
 
-	DrawRectangle(snake.frontPosition.x, snake.frontPosition.y, blockSize, blockSize, LIGHTGRAY);
-
 	if (IsKeyPressed('W')) snake.currentDirection = "UP";
 	else if (IsKeyPressed('A')) snake.currentDirection = "LEFT";
 	else if (IsKeyPressed('S')) snake.currentDirection = "DOWN";
 	else if (IsKeyPressed('D')) snake.currentDirection = "RIGHT";
 
-	snake.frontPosition.x += snake.directions[snake.currentDirection].x;
-	snake.frontPosition.y += snake.directions[snake.currentDirection].y;
+	timer += GetFrameTime();
 
-	WaitTime(0.5);
+	if (timer > snake.delayInSeconds)
+	{
+		snake.frontPosition.x += snake.directions[snake.currentDirection].x;
+		snake.frontPosition.y += snake.directions[snake.currentDirection].y;
+
+		timer = 0;
+	}
+
+	DrawRectangle(snake.frontPosition.x, snake.frontPosition.y, blockSize, blockSize, LIGHTGRAY);
 }
