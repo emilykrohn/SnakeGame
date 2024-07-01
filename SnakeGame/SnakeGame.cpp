@@ -1,7 +1,10 @@
 #include "raylib.h"
 #include <vector>
+#include <array>
 #include <map>
 #include <string>
+#include <cstdlib>
+#include <time.h>
 
 const int screenWidth = 750;
 const int screenHeight = 450;
@@ -14,15 +17,29 @@ class Snake
 {
 public:
 	Vector2 frontPosition = { 0, 0 };
+
 	std::map<std::string, Vector2> directions;
 	std::string currentDirection = "RIGHT";
+
+	std::vector<Vector2> positions;
+	int blockCounter = 0;
+
 	float delayInSeconds = 0.5;
 };
 
+class Apple
+{
+public:
+	Vector2 position = { 0,0 };
+	bool isOnScreen = false;
+};
+
 Snake snake;
+Apple apple;
 
 void InitGame();
 void DrawGame();
+void DrawApple();
 
 int main(void)
 {
@@ -61,6 +78,11 @@ void InitGame()
 
 	snake.frontPosition.x = (screenWidth / 2) - (blockSize / 2);
 	snake.frontPosition.y = (screenHeight / 2) - (blockSize / 2);
+
+	snake.positions.push_back(snake.frontPosition);
+	snake.blockCounter++;
+
+	srand(time(0));
 }
 
 void DrawGame()
@@ -83,4 +105,40 @@ void DrawGame()
 	}
 
 	DrawRectangle(snake.frontPosition.x, snake.frontPosition.y, blockSize, blockSize, LIGHTGRAY);
+
+	DrawApple();
 }
+
+void DrawApple()
+{
+	if (!apple.isOnScreen)
+	{
+		bool isPositionUpdated = false;
+
+		while (!isPositionUpdated)
+		{
+			int tempXPosition = rand();
+			int tempYPosition = rand();
+
+			for (int i = 0; i < snake.positions.size(); i++)
+			{
+				if (snake.positions[i].x == tempXPosition || snake.positions[i].y == tempYPosition)
+				{
+					break;
+				}
+				else if (i == snake.positions.size())
+				{
+					apple.position.x = tempXPosition;
+					apple.position.y = tempYPosition;
+					
+					isPositionUpdated = true;
+				}
+			}
+		}
+
+		apple.isOnScreen = true;
+	}
+
+	DrawRectangle(apple.position.x, apple.position.y, blockSize, blockSize, RED);
+}
+
