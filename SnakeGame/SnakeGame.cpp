@@ -22,7 +22,6 @@ public:
 	std::string currentDirection = "RIGHT";
 
 	std::vector<Vector2> positions;
-	int blockCounter = 0;
 
 	float delayInSeconds = 0.5;
 };
@@ -39,7 +38,9 @@ Apple apple;
 
 void InitGame();
 void DrawGame();
+
 void DrawApple();
+Vector2 GenerateRandomPosition();
 
 int main(void)
 {
@@ -80,7 +81,6 @@ void InitGame()
 	snake.frontPosition.y = (screenHeight / 2) - (blockSize / 2);
 
 	snake.positions.push_back(snake.frontPosition);
-	snake.blockCounter++;
 
 	srand(time(0));
 }
@@ -117,22 +117,24 @@ void DrawApple()
 
 		while (!isPositionUpdated)
 		{
-			int tempXPosition = rand();
-			int tempYPosition = rand();
+			Vector2 tempPosition = GenerateRandomPosition();
+			bool isValidPosition = true;
 
 			for (int i = 0; i < snake.positions.size(); i++)
 			{
-				if (snake.positions[i].x == tempXPosition || snake.positions[i].y == tempYPosition)
+				if (snake.positions[i].x == tempPosition.x || snake.positions[i].y == tempPosition.y)
 				{
+					isValidPosition = false;
 					break;
 				}
-				else if (i == snake.positions.size())
-				{
-					apple.position.x = tempXPosition;
-					apple.position.y = tempYPosition;
+			}
+
+			if (isValidPosition)
+			{
+				apple.position.x = tempPosition.x;
+				apple.position.y = tempPosition.y;
 					
-					isPositionUpdated = true;
-				}
+				isPositionUpdated = true;
 			}
 		}
 
@@ -140,5 +142,18 @@ void DrawApple()
 	}
 
 	DrawRectangle(apple.position.x, apple.position.y, blockSize, blockSize, RED);
+}
+
+Vector2 GenerateRandomPosition()
+{
+	Vector2 position;
+
+	position.x = rand() % 7 * 100;
+	if (rand() % 2) position.x += 50;
+
+	position.y = rand() % 4 * 100;
+	if (rand() % 2) position.y += 50;
+
+	return position;
 }
 
