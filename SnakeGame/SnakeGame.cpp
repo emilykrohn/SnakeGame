@@ -38,10 +38,13 @@ Apple apple;
 void InitGame();
 void DrawGame();
 
+void PlayerInput();
 void DrawApple();
+void SnakeMovement();
 void SpawnApple();
 Vector2 GenerateRandomPosition();
-bool AppleCollision();
+void AppleCollision();
+bool isValidPosition(Vector2 position);
 
 int main(void)
 {
@@ -92,11 +95,27 @@ void DrawGame()
 {
 	ClearBackground(RAYWHITE);
 
+	PlayerInput();
+
+	SnakeMovement();
+
+	DrawApple();
+
+	DrawRectangle(snake.frontPosition.x, snake.frontPosition.y, blockSize, blockSize, LIGHTGRAY);
+
+	AppleCollision();
+}
+
+void PlayerInput()
+{
 	if (IsKeyPressed('W')) snake.currentDirection = "UP";
 	else if (IsKeyPressed('A')) snake.currentDirection = "LEFT";
 	else if (IsKeyPressed('S')) snake.currentDirection = "DOWN";
 	else if (IsKeyPressed('D')) snake.currentDirection = "RIGHT";
+}
 
+void SnakeMovement()
+{
 	timer += GetFrameTime();
 
 	if (timer > snake.delayInSeconds)
@@ -106,12 +125,6 @@ void DrawGame()
 
 		timer = 0;
 	}
-
-	DrawApple();
-
-	DrawRectangle(snake.frontPosition.x, snake.frontPosition.y, blockSize, blockSize, LIGHTGRAY);
-
-	AppleCollision();
 }
 
 void DrawApple()
@@ -126,18 +139,8 @@ void SpawnApple()
 	while (!isPositionUpdated)
 	{
 		Vector2 tempPosition = GenerateRandomPosition();
-		bool isValidPosition = true;
 
-		for (int i = 0; i < snake.positions.size(); i++)
-		{
-			if (snake.positions[i].x == tempPosition.x || snake.positions[i].y == tempPosition.y)
-			{
-				isValidPosition = false;
-				break;
-			}
-		}
-
-		if (isValidPosition)
+		if (isValidPosition(tempPosition))
 		{
 			apple.position.x = tempPosition.x;
 			apple.position.y = tempPosition.y;
@@ -160,13 +163,20 @@ Vector2 GenerateRandomPosition()
 	return position;
 }
 
-bool AppleCollision()
+bool isValidPosition(Vector2 position)
 {
-	if (snake.frontPosition.x == apple.position.x && snake.frontPosition.y == apple.position.y)
+	for (int i = 0; i < snake.positions.size(); i++)
 	{
-		SpawnApple();
-		return true;
+		if (snake.positions[i].x == position.x || snake.positions[i].y == position.y)
+		{
+			return false;
+		}
 	}
-	return false;
+	return true;
+}
+
+void AppleCollision()
+{
+	if (snake.frontPosition.x == apple.position.x && snake.frontPosition.y == apple.position.y) SpawnApple();
 }
 
