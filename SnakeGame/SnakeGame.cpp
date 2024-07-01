@@ -148,11 +148,11 @@ Vector2 GenerateRandomPosition()
 {
 	Vector2 position;
 
-	position.x = rand() % 7 * 100;
-	if (rand() % 2) position.x += 50;
+	position.x = rand() % 8 * 100;
+	if (position.x != 700 && rand() % 2) position.x += 50;
 
-	position.y = rand() % 4 * 100;
-	if (rand() % 2) position.y += 50;
+	position.y = rand() % 5 * 100;
+	if (position.y != 400 && rand() % 2) position.y += 50;
 
 	return position;
 }
