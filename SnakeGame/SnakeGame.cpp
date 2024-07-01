@@ -40,11 +40,14 @@ void DrawGame();
 
 void PlayerInput();
 void DrawApple();
+void DrawSnake();
 void SnakeMovement();
+void UpdateSnakePosition();
 void SpawnApple();
 Vector2 GenerateRandomPosition();
 void AppleCollision();
 bool isValidPosition(Vector2 position);
+void AddSnakeBlock();
 
 int main(void)
 {
@@ -101,9 +104,17 @@ void DrawGame()
 
 	DrawApple();
 
-	DrawRectangle(snake.frontPosition.x, snake.frontPosition.y, blockSize, blockSize, LIGHTGRAY);
+	DrawSnake();
 
 	AppleCollision();
+}
+
+void DrawSnake()
+{
+	for (int i = 0; i < snake.positions.size(); i++)
+	{
+		DrawRectangle(snake.positions[i].x, snake.positions[i].y, blockSize, blockSize, LIGHTGRAY);
+	}
 }
 
 void PlayerInput()
@@ -114,6 +125,16 @@ void PlayerInput()
 	else if (IsKeyPressed('D')) snake.currentDirection = "RIGHT";
 }
 
+void UpdateSnakePosition()
+{
+	for (int i = 1; i < snake.positions.size(); i++)
+	{
+		snake.positions[i] = snake.positions[i - 1];
+	}
+
+	snake.positions[0] = snake.frontPosition;
+}
+
 void SnakeMovement()
 {
 	timer += GetFrameTime();
@@ -122,6 +143,8 @@ void SnakeMovement()
 	{
 		snake.frontPosition.x += snake.directions[snake.currentDirection].x;
 		snake.frontPosition.y += snake.directions[snake.currentDirection].y;
+
+		UpdateSnakePosition();
 
 		timer = 0;
 	}
@@ -167,7 +190,7 @@ bool isValidPosition(Vector2 position)
 {
 	for (int i = 0; i < snake.positions.size(); i++)
 	{
-		if (snake.positions[i].x == position.x || snake.positions[i].y == position.y)
+		if (snake.positions[i].x == position.x && snake.positions[i].y == position.y)
 		{
 			return false;
 		}
@@ -175,8 +198,18 @@ bool isValidPosition(Vector2 position)
 	return true;
 }
 
+void AddSnakeBlock()
+{
+	Vector2 newBlockPosition = snake.positions[snake.positions.size() - 1];
+	snake.positions.push_back(newBlockPosition);
+}
+
 void AppleCollision()
 {
-	if (snake.frontPosition.x == apple.position.x && snake.frontPosition.y == apple.position.y) SpawnApple();
+	if (snake.frontPosition.x == apple.position.x && snake.frontPosition.y == apple.position.y)
+	{
+		SpawnApple();
+		AddSnakeBlock();
+	}
 }
 
