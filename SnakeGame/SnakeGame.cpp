@@ -11,6 +11,8 @@ const int screenHeight = 450;
 
 const int blockSize = 50;
 
+bool isGameOver = false;
+
 float timer = 0;
 
 class Snake
@@ -37,6 +39,7 @@ Apple apple;
 
 void InitGame();
 void DrawGame();
+void DrawGameOver();
 
 void PlayerInput();
 void DrawApple();
@@ -48,6 +51,7 @@ Vector2 GenerateRandomPosition();
 void AppleCollision();
 bool isValidPosition(Vector2 position);
 void AddSnakeBlock();
+void SnakeCollision();
 
 int main(void)
 {
@@ -74,6 +78,8 @@ int main(void)
 
 void InitGame()
 {
+	isGameOver = false;
+
 	Vector2 left = { -50, 0 };
 	Vector2 right = { 50, 0 };
 	Vector2 up = { 0, -50 };
@@ -96,17 +102,30 @@ void InitGame()
 
 void DrawGame()
 {
+	if (!isGameOver)
+	{
+		ClearBackground(RAYWHITE);
+
+		PlayerInput();
+
+		SnakeMovement();
+
+		DrawApple();
+
+		DrawSnake();
+
+		AppleCollision();
+	}
+	else
+	{
+		DrawGameOver();
+	}
+}
+
+void DrawGameOver()
+{
 	ClearBackground(RAYWHITE);
-
-	PlayerInput();
-
-	SnakeMovement();
-
-	DrawApple();
-
-	DrawSnake();
-
-	AppleCollision();
+	DrawText("Game Over!", screenWidth / 2, screenHeight / 2, 10, LIGHTGRAY);
 }
 
 void DrawSnake()
@@ -144,6 +163,7 @@ void SnakeMovement()
 		snake.frontPosition.x += snake.directions[snake.currentDirection].x;
 		snake.frontPosition.y += snake.directions[snake.currentDirection].y;
 
+		SnakeCollision();
 		UpdateSnakePosition();
 
 		timer = 0;
@@ -210,6 +230,17 @@ void AppleCollision()
 	{
 		SpawnApple();
 		AddSnakeBlock();
+	}
+}
+
+void SnakeCollision()
+{
+	for (int i = 1; i < snake.positions.size(); i++)
+	{
+		if (snake.positions[i].x == snake.frontPosition.x && snake.positions[i].y == snake.frontPosition.y)
+		{
+			isGameOver = true;
+		}
 	}
 }
 
