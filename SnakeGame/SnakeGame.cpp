@@ -235,6 +235,12 @@ void AppleCollision()
 
 void SnakeCollision()
 {
+	if (snake.frontPosition.x > 700 || snake.frontPosition.x < 0 ||
+		snake.frontPosition.y > 400 || snake.frontPosition.y < 0)
+	{
+		isGameOver = true;
+	}
+
 	for (int i = 1; i < snake.positions.size(); i++)
 	{
 		if (snake.positions[i].x == snake.frontPosition.x && snake.positions[i].y == snake.frontPosition.y)
