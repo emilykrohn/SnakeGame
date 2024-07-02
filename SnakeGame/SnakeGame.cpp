@@ -25,7 +25,7 @@ public:
 
 	std::vector<Vector2> positions;
 
-	float delayInSeconds = 0.5;
+	float delayInSeconds = 0.3;
 };
 
 class Apple
@@ -90,9 +90,12 @@ void InitGame()
 	snake.directions["UP"] = up;
 	snake.directions["DOWN"] = down;
 
+	snake.currentDirection = "RIGHT";
+
 	snake.frontPosition.x = (screenWidth / 2) - (blockSize / 2);
 	snake.frontPosition.y = (screenHeight / 2) - (blockSize / 2);
 
+	snake.positions.clear();
 	snake.positions.push_back(snake.frontPosition);
 
 	SpawnApple();
@@ -119,6 +122,10 @@ void DrawGame()
 	else
 	{
 		DrawGameOver();
+		if (IsKeyPressed('R'))
+		{
+			InitGame();
+		}
 	}
 }
 
