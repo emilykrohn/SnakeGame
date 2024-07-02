@@ -105,10 +105,10 @@ void InitGame()
 
 void DrawGame()
 {
+	ClearBackground(DARKGRAY);
+
 	if (!isGameOver)
 	{
-		ClearBackground(RAYWHITE);
-
 		PlayerInput();
 
 		SnakeMovement();
@@ -131,8 +131,6 @@ void DrawGame()
 
 void DrawGameOver()
 {
-	ClearBackground(RAYWHITE);
-
 	Vector2 gameOverTextOffset = MeasureTextEx(GetFontDefault(), "Game Over!", 30, 0);
 	Vector2 restartTextOffset = MeasureTextEx(GetFontDefault(), "Press R to RESTART", 30, 0);
 
@@ -184,7 +182,7 @@ void SnakeMovement()
 
 void DrawApple()
 {
-	DrawRectangle(apple.position.x, apple.position.y, blockSize, blockSize, RED);
+	DrawRectangle(apple.position.x, apple.position.y, blockSize, blockSize, MAROON);
 }
 
 void SpawnApple()
