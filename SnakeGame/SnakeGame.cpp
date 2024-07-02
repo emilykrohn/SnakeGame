@@ -125,7 +125,8 @@ void DrawGame()
 void DrawGameOver()
 {
 	ClearBackground(RAYWHITE);
-	DrawText("Game Over!", screenWidth / 2, screenHeight / 2, 10, LIGHTGRAY);
+	Vector2 textOffset = MeasureTextEx(GetFontDefault(), "Game Over!", 30, 0);
+	DrawText("Game Over!", screenWidth / 2 - (textOffset.x / 2), screenHeight / 2 - (textOffset.y / 2), 30, LIGHTGRAY);
 }
 
 void DrawSnake()
