@@ -41,13 +41,13 @@ void InitGame();
 void DrawGame();
 void DrawGameOver();
 
+Vector2 GenerateRandomPosition();
 void PlayerInput();
 void DrawApple();
 void DrawSnake();
 void SnakeMovement();
 void UpdateSnakePosition();
 void SpawnApple();
-Vector2 GenerateRandomPosition();
 void AppleCollision();
 bool isValidPosition(Vector2 position);
 void AddSnakeBlock();
@@ -125,8 +125,12 @@ void DrawGame()
 void DrawGameOver()
 {
 	ClearBackground(RAYWHITE);
-	Vector2 textOffset = MeasureTextEx(GetFontDefault(), "Game Over!", 30, 0);
-	DrawText("Game Over!", screenWidth / 2 - (textOffset.x / 2), screenHeight / 2 - (textOffset.y / 2), 30, LIGHTGRAY);
+
+	Vector2 gameOverTextOffset = MeasureTextEx(GetFontDefault(), "Game Over!", 30, 0);
+	Vector2 restartTextOffset = MeasureTextEx(GetFontDefault(), "Press R to RESTART", 30, 0);
+
+	DrawText("Game Over!", screenWidth / 2 - (gameOverTextOffset.x / 2), screenHeight / 2 - (gameOverTextOffset.y * 2), 30, LIGHTGRAY);
+	DrawText("Press R to RESTART", screenWidth / 2 - (restartTextOffset.x / 2), screenHeight / 2 - (restartTextOffset.y / 2), 30, LIGHTGRAY);
 }
 
 void DrawSnake()
