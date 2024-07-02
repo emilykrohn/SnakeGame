@@ -127,7 +127,7 @@ void PlayerInput()
 
 void UpdateSnakePosition()
 {
-	for (int i = 1; i < snake.positions.size(); i++)
+	for (int i = snake.positions.size() - 1; i > 0; i--)
 	{
 		snake.positions[i] = snake.positions[i - 1];
 	}
