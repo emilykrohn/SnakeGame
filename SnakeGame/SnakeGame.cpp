@@ -119,10 +119,10 @@ void DrawSnake()
 
 void PlayerInput()
 {
-	if (IsKeyPressed('W')) snake.currentDirection = "UP";
-	else if (IsKeyPressed('A')) snake.currentDirection = "LEFT";
-	else if (IsKeyPressed('S')) snake.currentDirection = "DOWN";
-	else if (IsKeyPressed('D')) snake.currentDirection = "RIGHT";
+	if (IsKeyPressed('W') && snake.currentDirection != "DOWN") snake.currentDirection = "UP";
+	else if (IsKeyPressed('A') && snake.currentDirection != "RIGHT") snake.currentDirection = "LEFT";
+	else if (IsKeyPressed('S') && snake.currentDirection != "UP") snake.currentDirection = "DOWN";
+	else if (IsKeyPressed('D') && snake.currentDirection != "LEFT") snake.currentDirection = "RIGHT";
 }
 
 void UpdateSnakePosition()
